@@ -245,6 +245,15 @@ prompt_histdt() {
     prompt_segment black default "\! [\A]"
 }
 
+# print current user
+prompt_curr_user() {
+  prompt_segment black white '\u'
+}
+
+# print current date
+prompt_date() {
+  prompt_segment black white '\D{%d.%m %H:%M}'
+}
 
 git_status_dirty() {
     dirty=$(git status -s 2> /dev/null | tail -n 1)
@@ -448,14 +457,16 @@ prompt_emacsdir() {
 ## Main prompt
 
 build_prompt() {
+    # print PWD in terminal window bar
+    echo -ne "\033]0;${PWD##*/}\007"
     [[ ! -z ${AG_EMACS_DIR+x} ]] && prompt_emacsdir
     prompt_status
     #[[ -z ${AG_NO_HIST+x} ]] && prompt_histdt
+    prompt_date
     [[ -z ${AG_NO_CONTEXT+x} ]] && prompt_context
     prompt_virtualenv
     prompt_dir
     prompt_git
-    prompt_hg
     prompt_end
 }
 
